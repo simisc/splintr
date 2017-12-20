@@ -1,0 +1,13 @@
+Package: splintr
+Type: Package
+Title: Natural Cubic Splines with Interpretable Intercept
+Version: 0.1.0
+Author: Simon Sch...
+Maintainer: The package maintainer <yourself@somewhere.net>
+Description: Adjusts an ns() basis matrix so that all terms are
+    zero when x = centre. When used in a model formula, this
+    ensures that the intercept can be interpreted easily.
+License: What license is it under?
+Encoding: UTF-8
+LazyData: true
+Imports: splines
