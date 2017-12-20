@@ -1,6 +1,6 @@
 splintr <- function(..., centre = 0) {
   n <- splines::ns(...)
-  adj <- splines::predict(n, newx = centre)
+  adj <- predict(n, newx = centre)
   df <- length(attr(n, "knots")) + 1
 
   length(adj) == df || stop("Length of adj does not much df.")
