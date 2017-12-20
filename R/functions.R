@@ -35,4 +35,5 @@ predict.splintr <- function (object, newx, ...) {
                               "centre")])
   n <- do.call("splintr", a)
   # should this be the return value? Check usage n original
+  return(n)
 }
