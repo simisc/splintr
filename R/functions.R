@@ -8,17 +8,15 @@
 splintr <- function(..., centre = 0) {
   n <- splines::ns(...)
   adj <- predict(n, newx = centre)
-  # df <- length(attr(n, "knots")) + 1
-  # for (i in 1:df) n[, i] <- n[, i] - adj[i]
   n <- sweep(n, 2, adj)
-  class(n)[1L] <- "splintr"
+  class(n)[1] <- "splintr"
   attr(n, "centre") <- centre
   return(n)
 }
 
+#' @export
 makepredictcall.splintr <- function (var, call) {
-  # if (as.character(call)[1L] != "splintr")
-  #   return(call)
+  # For prediction from models that use splintr in the formula
   as.character(call)[1L] != "splintr" && return(call)
   at <- attributes(var)[c("knots",
                           "Boundary.knots",
@@ -29,9 +27,9 @@ makepredictcall.splintr <- function (var, call) {
   return(x)
 }
 
+#' @export
 predict.splintr <- function (object, newx, ...) {
-  # if (missing(newx))
-  #   return(object)
+  # For prediction from the splintr object itself
   missing(newx) && return(object)
   a <- c(list(x = newx),
          attributes(object)[c("knots",
