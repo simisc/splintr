@@ -3,7 +3,7 @@
 #' @param ... Parameters passed to \code{\link[splines]{ns}}.
 #' @param centre The \code{x}-value at which all spline terms should be zero.
 #' @return A matrix of dimension \code{length(x)} by \code{df}, like \code{\link[splines]{ns}}.
-#'   Attributes are that correspond to the arguments to \code{ns()} with an additional
+#'   Attributes are that correspond to the arguments to \code{\link[splines]{ns}} with an additional
 #'   \code{centre} attribute for use by \code{predict.splintr()}.
 splintr <- function(..., centre = 0) {
   n <- splines::ns(...)
