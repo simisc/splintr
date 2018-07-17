@@ -24,7 +24,6 @@ makepredictcall.splintr <- function (var, call) {
                           "centre")]
   x <- call[1L:2L]
   x[names(at)] <- at
-
   return(x)
 }
 
