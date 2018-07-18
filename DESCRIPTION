@@ -3,7 +3,6 @@ Type: Package
 Title: Natural Cubic SPLines with Interpretable INTercepts
 Version: 0.1.0
 Author: Simon Schoenbuchner
-Maintainer: https://github.com/simisc
 Description: Adjusts an ns() basis matrix so that all terms are
     zero when x takes the specified centre value. When used in a
     model formula, this ensures that the regression intercept can
