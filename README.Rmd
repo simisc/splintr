@@ -1,0 +1,54 @@
+---
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, echo = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "README-"
+)
+```
+
+# splintr
+
+Natural cubic splines with interpretable intercepts: 'centres' a basis generated using `splines::ns()` on a specified x-value. When used in a model formula, this allows the model intercept to be interpreted with respect to that central x-value, rather than with respect to the x-value of the first `splines::ns()` knot.
+
+## Installation
+
+You can install splintr from github with:
+
+```{r gh-installation, eval = FALSE}
+# install.packages("devtools")
+devtools::install_github("simisc/splintr")
+```
+
+## Example
+
+Using `splines::ns()` in a model formula as below, the model intercept represents the estimated value of `weight` at the first boundary knot, i.e. when `height` takes its minimum value of 58. Centring the predictor does not change the model intercept.
+
+```{r}
+library(splines)
+library(broom)
+tidy(fm1 <- lm(weight ~ ns(height, df = 5), data = women))
+attr(ns(women$height, df = 5), "Boundary.knots")
+predict(fm1, newdata = data.frame(height = 58))
+women$height_centred <- women$height - mean(women$height)
+tidy(fm2 <- lm(weight ~ ns(height_centred, df = 5), data = women))
+attr(ns(women$height_centred, df = 5), "Boundary.knots")
+predict(fm2, newdata = data.frame(height_centred = -7))
+```
+
+Using `splintr()` instead, the intercept representes the estimated value of `weight` when the predictor `height_centred` takes a value of zero. Alternatively, a new centre can be specified directly in the `splintr()` call.
+
+```{r}
+library(splintr)
+tidy(fm3 <- lm(weight ~ splintr(height_centred, df = 5), data = women))
+attr(splintr(women$height_centred, df = 5), "Boundary.knots")
+predict(fm3, newdata = data.frame(height_centred = 0))
+tidy(fm4 <- lm(weight ~ splintr(height, df = 5, centre = 63.4), data = women))
+attr(splintr(women$height, df = 5, centre = 63.4), "Boundary.knots")
+predict(fm4, newdata = data.frame(height = 63.4))
+```
