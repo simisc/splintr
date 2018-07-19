@@ -1,7 +1,7 @@
 Package: splintr
 Type: Package
 Title: Natural Cubic SPLines with Interpretable INTercepts
-Version: 0.1.0
+Version: 1.0.0
 Author: Simon Schoenbuchner
 Description: Adjusts an ns() basis matrix so that all terms are
     zero when x takes the specified centre value. When used in a
