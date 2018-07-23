@@ -2,7 +2,7 @@
 % Please edit documentation in R/functions.R
 \name{splintr}
 \alias{splintr}
-\title{Generate a basis matrix for natural cubic splines with interpretable intercepts}
+\title{Generate centred basis matrix}
 \usage{
 splintr(..., centre = 0)
 }
@@ -17,5 +17,6 @@ A matrix of dimension \code{length(x)} by \code{df}, like \code{\link[splines]{n
   \code{centre} attribute for use by \code{predict.splintr()}.
 }
 \description{
-Generate a basis matrix for natural cubic splines with interpretable intercepts
+Generate the basis matrix for a natural cubic splines with interpretable
+  intercepts
 }

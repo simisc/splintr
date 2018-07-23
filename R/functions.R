@@ -1,4 +1,7 @@
-#' Generate a basis matrix for natural cubic splines with interpretable intercepts
+#' Generate centred basis matrix
+#'
+#' Generate the basis matrix for a natural cubic splines with interpretable
+#'   intercepts
 #' @export
 #' @param ... Parameters passed to \code{\link[splines]{ns}}.
 #' @param centre The \code{x}-value at which all spline terms should be zero.
