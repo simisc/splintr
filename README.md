@@ -18,82 +18,152 @@ devtools::install_github("simisc/splintr")
 Example
 -------
 
-Using `splines::ns()` in a model formula as below, the model intercept represents the estimated value of `weight` at the first boundary knot, i.e. when `height` takes its minimum value of 58. Centring the predictor does not change the model intercept.
-
 ``` r
-library(splines)
-library(broom)
-tidy(fm1 <- lm(weight ~ ns(height, df = 5), data = women))
-#>                  term  estimate std.error statistic      p.value
-#> 1         (Intercept) 114.74466 0.2337541 490.87766 3.076416e-21
-#> 2 ns(height, df = 5)1  15.94736 0.3698567  43.11767 9.691543e-12
-#> 3 ns(height, df = 5)2  25.16949 0.4322604  58.22761 6.546364e-13
-#> 4 ns(height, df = 5)3  33.25822 0.3540711  93.93089 8.908069e-15
-#> 5 ns(height, df = 5)4  50.78938 0.6061996  83.78327 2.489882e-14
-#> 6 ns(height, df = 5)5  45.03633 0.2784267 161.75289 6.707973e-17
-attr(ns(women$height, df = 5), "Boundary.knots")
-#> [1] 58 72
-predict(fm1, newdata = data.frame(height = 58))
-#>        1 
-#> 114.7447
-women$height_centred <- women$height - mean(women$height)
-tidy(fm2 <- lm(weight ~ ns(height_centred, df = 5), data = women))
-#>                          term  estimate std.error statistic      p.value
-#> 1                 (Intercept) 114.74466 0.2337541 490.87766 3.076416e-21
-#> 2 ns(height_centred, df = 5)1  15.94736 0.3698567  43.11767 9.691543e-12
-#> 3 ns(height_centred, df = 5)2  25.16949 0.4322604  58.22761 6.546364e-13
-#> 4 ns(height_centred, df = 5)3  33.25822 0.3540711  93.93089 8.908069e-15
-#> 5 ns(height_centred, df = 5)4  50.78938 0.6061996  83.78327 2.489882e-14
-#> 6 ns(height_centred, df = 5)5  45.03633 0.2784267 161.75289 6.707973e-17
-attr(ns(women$height_centred, df = 5), "Boundary.knots")
-#> [1] -7  7
-predict(fm2, newdata = data.frame(height_centred = -7))
-#>        1 
-#> 114.7447
+library(broom)   # tidy(), augment()
+library(knitr)   # kable()
+library(ggplot2) # ggplot()
+library(splines) # ns()
+library(splintr) # splintr()
 ```
 
-Using `splintr()` instead, the intercept representes the estimated value of `weight` when the predictor `height_centred` takes a value of zero. Alternatively, a new centre can be specified directly in the `splintr()` call.
+Using `splines::ns()` in a model formula as below, the model intercept represents the estimated value of `weight` at the first boundary knot, i.e. when `height` takes its minimum value of 58.
 
 ``` r
-library(splintr)
-tidy(fm3 <- lm(weight ~ splintr(height_centred, df = 5), data = women))
-#>                               term  estimate std.error statistic
-#> 1                      (Intercept) 135.33595 0.1402826 964.73789
-#> 2 splintr(height_centred, df = 5)1  15.94736 0.3698567  43.11767
-#> 3 splintr(height_centred, df = 5)2  25.16949 0.4322604  58.22761
-#> 4 splintr(height_centred, df = 5)3  33.25822 0.3540711  93.93089
-#> 5 splintr(height_centred, df = 5)4  50.78938 0.6061996  83.78327
-#> 6 splintr(height_centred, df = 5)5  45.03633 0.2784267 161.75289
-#>        p.value
-#> 1 7.033470e-24
-#> 2 9.691543e-12
-#> 3 6.546364e-13
-#> 4 8.908069e-15
-#> 5 2.489882e-14
-#> 6 6.707973e-17
-attr(splintr(women$height_centred, df = 5), "Boundary.knots")
-#> [1] -7  7
-predict(fm3, newdata = data.frame(height_centred = 0))
-#>       1 
-#> 135.336
-tidy(fm4 <- lm(weight ~ splintr(height, df = 5, centre = 63.4), data = women))
-#>                                      term  estimate std.error statistic
-#> 1                             (Intercept) 130.16388 0.1704543 763.62922
-#> 2 splintr(height, df = 5, centre = 63.4)1  15.94736 0.3698567  43.11767
-#> 3 splintr(height, df = 5, centre = 63.4)2  25.16949 0.4322604  58.22761
-#> 4 splintr(height, df = 5, centre = 63.4)3  33.25822 0.3540711  93.93089
-#> 5 splintr(height, df = 5, centre = 63.4)4  50.78938 0.6061996  83.78327
-#> 6 splintr(height, df = 5, centre = 63.4)5  45.03633 0.2784267 161.75289
-#>        p.value
-#> 1 5.766345e-23
-#> 2 9.691543e-12
-#> 3 6.546364e-13
-#> 4 8.908069e-15
-#> 5 2.489882e-14
-#> 6 6.707973e-17
-attr(splintr(women$height, df = 5, centre = 63.4), "Boundary.knots")
+kable(tidy(fm0 <- lm(weight ~ ns(height, df = 3), data = women), quick = TRUE))
+```
+
+| term                |   estimate|
+|:--------------------|----------:|
+| (Intercept)         |  114.55946|
+| ns(height, df = 3)1 |   23.87318|
+| ns(height, df = 3)2 |   53.04162|
+| ns(height, df = 3)3 |   41.66370|
+
+``` r
+attr(ns(women$height, df = 3), "Boundary.knots")
 #> [1] 58 72
-predict(fm4, newdata = data.frame(height = 63.4))
+predict(fm0, newdata = data.frame(height = 0))
+#>         1 
+#> -49.06522
+predict(fm0, newdata = data.frame(height = 58))
 #>        1 
-#> 130.1639
+#> 114.5595
+ggplot(augment(fm0, data = women), aes(x = height)) +
+  geom_point(aes(y = weight)) +
+  geom_line(aes(y = .fitted), col = "blue") +
+  geom_point(data = NULL, aes(x = 58, y = coef(fm0)[1]), col = "red")
+```
+
+![](README-unnamed-chunk-3-1.png)
+
+Centring the predictor does not change the model intercept.
+
+``` r
+women$height_centred <- women$height - mean(women$height)
+kable(tidy(fm1 <- lm(weight ~ ns(height_centred, df = 3), data = women), quick = TRUE))
+```
+
+| term                         |   estimate|
+|:-----------------------------|----------:|
+| (Intercept)                  |  114.55946|
+| ns(height\_centred, df = 3)1 |   23.87318|
+| ns(height\_centred, df = 3)2 |   53.04162|
+| ns(height\_centred, df = 3)3 |   41.66370|
+
+``` r
+attr(ns(women$height_centred, df = 3), "Boundary.knots")
+#> [1] -7  7
+predict(fm1, newdata = data.frame(height_centred = 0))
+#>        1 
+#> 135.1067
+predict(fm1, newdata = data.frame(height_centred = -7))
+#>        1 
+#> 114.5595
+ggplot(augment(fm1, data = women), aes(x = height_centred)) +
+  geom_point(aes(y = weight)) +
+  geom_line(aes(y = .fitted), col = "blue") +
+  geom_point(data = NULL, aes(x = -7, y = coef(fm1)[1]), col = "red")
+```
+
+![](README-unnamed-chunk-4-1.png)
+
+Using `splintr()` instead, the intercept representes the estimated value of `weight` when the predictor `height_centred` takes a value of zero.
+
+``` r
+kable(tidy(fm2 <- lm(weight ~ splintr(height_centred, df = 3), data = women), quick = TRUE))
+```
+
+| term                              |   estimate|
+|:----------------------------------|----------:|
+| (Intercept)                       |  135.10672|
+| splintr(height\_centred, df = 3)1 |   23.87318|
+| splintr(height\_centred, df = 3)2 |   53.04162|
+| splintr(height\_centred, df = 3)3 |   41.66370|
+
+``` r
+attr(splintr(women$height_centred, df = 3), "Boundary.knots")
+#> [1] -7  7
+predict(fm2, newdata = data.frame(height_centred = 0))
+#>        1 
+#> 135.1067
+predict(fm2, newdata = data.frame(height_centred = -7))
+#>        1 
+#> 114.5595
+ggplot(augment(fm2, data = women), aes(x = height_centred)) +
+  geom_point(aes(y = weight)) +
+  geom_line(aes(y = .fitted), col = "blue") +
+  geom_point(data = NULL, aes(x = 0, y = coef(fm2)[1]), col = "red")
+```
+
+![](README-unnamed-chunk-5-1.png)
+
+Alternatively, a new centre can be specified directly in the `splintr()` call.
+
+``` r
+x_centre = 68.45
+kable(tidy(fm3 <- lm(weight ~ splintr(height, df = 3, centre = x_centre), data = women), quick = TRUE))
+```
+
+| term                                         |   estimate|
+|:---------------------------------------------|----------:|
+| (Intercept)                                  |  147.80566|
+| splintr(height, df = 3, centre = x\_centre)1 |   23.87318|
+| splintr(height, df = 3, centre = x\_centre)2 |   53.04162|
+| splintr(height, df = 3, centre = x\_centre)3 |   41.66370|
+
+``` r
+attr(splintr(women$height, df = 3, centre = x_centre), "Boundary.knots")
+#> [1] 58 72
+predict(fm3, newdata = data.frame(height = x_centre))
+#>        1 
+#> 147.8057
+ggplot(augment(fm2, data = women), aes(x = height)) +
+  geom_point(aes(y = weight)) +
+  geom_line(aes(y = .fitted), col = "blue") +
+  geom_point(data = NULL, aes(x = x_centre, y = coef(fm3)[1]), col = "red")
+```
+
+![](README-unnamed-chunk-6-1.png)
+
+The three models fit identically:
+
+``` r
+t(rbind(
+  fm0 = glance(fm0),
+  fm1 = glance(fm1),
+  fm2 = glance(fm2),
+  fm3 = glance(fm3)
+))
+#>                         fm0           fm1           fm2           fm3
+#> r.squared      9.996629e-01  9.996629e-01  9.996629e-01  9.996629e-01
+#> adj.r.squared  9.995710e-01  9.995710e-01  9.995710e-01  9.995710e-01
+#> sigma          3.210180e-01  3.210180e-01  3.210180e-01  3.210180e-01
+#> statistic      1.087406e+04  1.087406e+04  1.087406e+04  1.087406e+04
+#> p.value        2.254442e-19  2.254442e-19  2.254442e-19  2.254442e-19
+#> df             4.000000e+00  4.000000e+00  4.000000e+00  4.000000e+00
+#> logLik        -1.914046e+00 -1.914046e+00 -1.914046e+00 -1.914046e+00
+#> AIC            1.382809e+01  1.382809e+01  1.382809e+01  1.382809e+01
+#> BIC            1.736834e+01  1.736834e+01  1.736834e+01  1.736834e+01
+#> deviance       1.133578e+00  1.133578e+00  1.133578e+00  1.133578e+00
+#> df.residual    1.100000e+01  1.100000e+01  1.100000e+01  1.100000e+01
 ```

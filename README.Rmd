@@ -27,28 +27,74 @@ devtools::install_github("simisc/splintr")
 
 ## Example
 
-Using `splines::ns()` in a model formula as below, the model intercept represents the estimated value of `weight` at the first boundary knot, i.e. when `height` takes its minimum value of 58. Centring the predictor does not change the model intercept.
-
 ```{r}
-library(splines)
-library(broom)
-tidy(fm1 <- lm(weight ~ ns(height, df = 5), data = women))
-attr(ns(women$height, df = 5), "Boundary.knots")
-predict(fm1, newdata = data.frame(height = 58))
-women$height_centred <- women$height - mean(women$height)
-tidy(fm2 <- lm(weight ~ ns(height_centred, df = 5), data = women))
-attr(ns(women$height_centred, df = 5), "Boundary.knots")
-predict(fm2, newdata = data.frame(height_centred = -7))
+library(broom)   # tidy(), augment()
+library(knitr)   # kable()
+library(ggplot2) # ggplot()
+library(splines) # ns()
+library(splintr) # splintr()
 ```
 
-Using `splintr()` instead, the intercept representes the estimated value of `weight` when the predictor `height_centred` takes a value of zero. Alternatively, a new centre can be specified directly in the `splintr()` call.
+Using `splines::ns()` in a model formula as below, the model intercept represents the estimated value of `weight` at the first boundary knot, i.e. when `height` takes its minimum value of 58.
 
 ```{r}
-library(splintr)
-tidy(fm3 <- lm(weight ~ splintr(height_centred, df = 5), data = women))
-attr(splintr(women$height_centred, df = 5), "Boundary.knots")
-predict(fm3, newdata = data.frame(height_centred = 0))
-tidy(fm4 <- lm(weight ~ splintr(height, df = 5, centre = 63.4), data = women))
-attr(splintr(women$height, df = 5, centre = 63.4), "Boundary.knots")
-predict(fm4, newdata = data.frame(height = 63.4))
+kable(tidy(fm0 <- lm(weight ~ ns(height, df = 3), data = women), quick = TRUE))
+attr(ns(women$height, df = 3), "Boundary.knots")
+predict(fm0, newdata = data.frame(height = 0))
+predict(fm0, newdata = data.frame(height = 58))
+ggplot(augment(fm0, data = women), aes(x = height)) +
+  geom_point(aes(y = weight)) +
+  geom_line(aes(y = .fitted), col = "blue") +
+  geom_point(data = NULL, aes(x = 58, y = coef(fm0)[1]), col = "red")
+```
+
+Centring the predictor does not change the model intercept.
+
+```{r}
+women$height_centred <- women$height - mean(women$height)
+kable(tidy(fm1 <- lm(weight ~ ns(height_centred, df = 3), data = women), quick = TRUE))
+attr(ns(women$height_centred, df = 3), "Boundary.knots")
+predict(fm1, newdata = data.frame(height_centred = 0))
+predict(fm1, newdata = data.frame(height_centred = -7))
+ggplot(augment(fm1, data = women), aes(x = height_centred)) +
+  geom_point(aes(y = weight)) +
+  geom_line(aes(y = .fitted), col = "blue") +
+  geom_point(data = NULL, aes(x = -7, y = coef(fm1)[1]), col = "red")
+```
+
+Using `splintr()` instead, the intercept representes the estimated value of `weight` when the predictor `height_centred` takes a value of zero.
+
+```{r}
+kable(tidy(fm2 <- lm(weight ~ splintr(height_centred, df = 3), data = women), quick = TRUE))
+attr(splintr(women$height_centred, df = 3), "Boundary.knots")
+predict(fm2, newdata = data.frame(height_centred = 0))
+predict(fm2, newdata = data.frame(height_centred = -7))
+ggplot(augment(fm2, data = women), aes(x = height_centred)) +
+  geom_point(aes(y = weight)) +
+  geom_line(aes(y = .fitted), col = "blue") +
+  geom_point(data = NULL, aes(x = 0, y = coef(fm2)[1]), col = "red")
+```
+
+Alternatively, a new centre can be specified directly in the `splintr()` call.
+
+```{r}
+x_centre = 68.45
+kable(tidy(fm3 <- lm(weight ~ splintr(height, df = 3, centre = x_centre), data = women), quick = TRUE))
+attr(splintr(women$height, df = 3, centre = x_centre), "Boundary.knots")
+predict(fm3, newdata = data.frame(height = x_centre))
+ggplot(augment(fm2, data = women), aes(x = height)) +
+  geom_point(aes(y = weight)) +
+  geom_line(aes(y = .fitted), col = "blue") +
+  geom_point(data = NULL, aes(x = x_centre, y = coef(fm3)[1]), col = "red")
+```
+
+The three models fit identically:
+
+```{r}
+t(rbind(
+  fm0 = glance(fm0),
+  fm1 = glance(fm1),
+  fm2 = glance(fm2),
+  fm3 = glance(fm3)
+))
 ```
