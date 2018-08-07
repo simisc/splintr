@@ -21,9 +21,10 @@ Example
 ``` r
 library(broom)   # tidy(), augment()
 library(knitr)   # kable()
-library(ggplot2) # ggplot()
 library(splines) # ns()
 library(splintr) # splintr()
+library(ggplot2) # ggplot()
+theme_set(theme_minimal())
 ```
 
 Using `splines::ns()` in a model formula as below, the model intercept represents the estimated value of `weight` at the first boundary knot, i.e. when `height` takes its minimum value of 58.
@@ -117,7 +118,7 @@ ggplot(augment(fm2, data = women), aes(x = height_centred)) +
 
 ![](README-unnamed-chunk-5-1.png)
 
-Alternatively, a new centre can be specified directly in the `splintr()` call.
+Alternatively, an arbitrary "centre" can be specified directly in the `splintr()` call.
 
 ``` r
 x_centre = 68.45
@@ -145,25 +146,27 @@ ggplot(augment(fm2, data = women), aes(x = height)) +
 
 ![](README-unnamed-chunk-6-1.png)
 
-The three models fit identically:
+The four models fit identically:
 
 ``` r
-t(rbind(
+kable(t(rbind(
   fm0 = glance(fm0),
   fm1 = glance(fm1),
   fm2 = glance(fm2),
   fm3 = glance(fm3)
-))
-#>                         fm0           fm1           fm2           fm3
-#> r.squared      9.996629e-01  9.996629e-01  9.996629e-01  9.996629e-01
-#> adj.r.squared  9.995710e-01  9.995710e-01  9.995710e-01  9.995710e-01
-#> sigma          3.210180e-01  3.210180e-01  3.210180e-01  3.210180e-01
-#> statistic      1.087406e+04  1.087406e+04  1.087406e+04  1.087406e+04
-#> p.value        2.254442e-19  2.254442e-19  2.254442e-19  2.254442e-19
-#> df             4.000000e+00  4.000000e+00  4.000000e+00  4.000000e+00
-#> logLik        -1.914046e+00 -1.914046e+00 -1.914046e+00 -1.914046e+00
-#> AIC            1.382809e+01  1.382809e+01  1.382809e+01  1.382809e+01
-#> BIC            1.736834e+01  1.736834e+01  1.736834e+01  1.736834e+01
-#> deviance       1.133578e+00  1.133578e+00  1.133578e+00  1.133578e+00
-#> df.residual    1.100000e+01  1.100000e+01  1.100000e+01  1.100000e+01
+)))
 ```
+
+|               |            fm0|            fm1|            fm2|            fm3|
+|---------------|--------------:|--------------:|--------------:|--------------:|
+| r.squared     |      0.9996629|      0.9996629|      0.9996629|      0.9996629|
+| adj.r.squared |      0.9995710|      0.9995710|      0.9995710|      0.9995710|
+| sigma         |      0.3210180|      0.3210180|      0.3210180|      0.3210180|
+| statistic     |  10874.0608930|  10874.0608930|  10874.0608930|  10874.0608930|
+| p.value       |      0.0000000|      0.0000000|      0.0000000|      0.0000000|
+| df            |      4.0000000|      4.0000000|      4.0000000|      4.0000000|
+| logLik        |     -1.9140458|     -1.9140458|     -1.9140458|     -1.9140458|
+| AIC           |     13.8280915|     13.8280915|     13.8280915|     13.8280915|
+| BIC           |     17.3683425|     17.3683425|     17.3683425|     17.3683425|
+| deviance      |      1.1335783|      1.1335783|      1.1335783|      1.1335783|
+| df.residual   |     11.0000000|     11.0000000|     11.0000000|     11.0000000|

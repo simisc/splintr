@@ -30,9 +30,10 @@ devtools::install_github("simisc/splintr")
 ```{r}
 library(broom)   # tidy(), augment()
 library(knitr)   # kable()
-library(ggplot2) # ggplot()
 library(splines) # ns()
 library(splintr) # splintr()
+library(ggplot2) # ggplot()
+theme_set(theme_minimal())
 ```
 
 Using `splines::ns()` in a model formula as below, the model intercept represents the estimated value of `weight` at the first boundary knot, i.e. when `height` takes its minimum value of 58.
@@ -75,7 +76,7 @@ ggplot(augment(fm2, data = women), aes(x = height_centred)) +
   geom_point(data = NULL, aes(x = 0, y = coef(fm2)[1]), col = "red")
 ```
 
-Alternatively, a new centre can be specified directly in the `splintr()` call.
+Alternatively, an arbitrary "centre" can be specified directly in the `splintr()` call.
 
 ```{r}
 x_centre = 68.45
@@ -88,13 +89,13 @@ ggplot(augment(fm2, data = women), aes(x = height)) +
   geom_point(data = NULL, aes(x = x_centre, y = coef(fm3)[1]), col = "red")
 ```
 
-The three models fit identically:
+The four models fit identically:
 
 ```{r}
-t(rbind(
+kable(t(rbind(
   fm0 = glance(fm0),
   fm1 = glance(fm1),
   fm2 = glance(fm2),
   fm3 = glance(fm3)
-))
+)))
 ```
