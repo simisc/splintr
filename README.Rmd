@@ -38,7 +38,7 @@ theme_set(theme_minimal())
 
 Using `splines::ns()` in a model formula as below, the model intercept represents the estimated value of `weight` at the first boundary knot, i.e. when `height` takes its minimum value of 58.
 
-```{r}
+```{r example1}
 kable(tidy(fm0 <- lm(weight ~ ns(height, df = 3), data = women), quick = TRUE))
 attr(ns(women$height, df = 3), "Boundary.knots")
 predict(fm0, newdata = data.frame(height = 0))
@@ -51,7 +51,7 @@ ggplot(augment(fm0, data = women), aes(x = height)) +
 
 Centring the predictor does not change the model intercept.
 
-```{r}
+```{r example2}
 women$height_centred <- women$height - mean(women$height)
 kable(tidy(fm1 <- lm(weight ~ ns(height_centred, df = 3), data = women), quick = TRUE))
 attr(ns(women$height_centred, df = 3), "Boundary.knots")
@@ -65,7 +65,7 @@ ggplot(augment(fm1, data = women), aes(x = height_centred)) +
 
 Using `splintr()` instead, the intercept representes the estimated value of `weight` when the predictor `height_centred` takes a value of zero.
 
-```{r}
+```{r example3}
 kable(tidy(fm2 <- lm(weight ~ splintr(height_centred, df = 3), data = women), quick = TRUE))
 attr(splintr(women$height_centred, df = 3), "Boundary.knots")
 predict(fm2, newdata = data.frame(height_centred = 0))
@@ -78,7 +78,7 @@ ggplot(augment(fm2, data = women), aes(x = height_centred)) +
 
 Alternatively, an arbitrary "centre" can be specified directly in the `splintr()` call.
 
-```{r}
+```{r example4}
 x_centre = 68.45
 kable(tidy(fm3 <- lm(weight ~ splintr(height, df = 3, centre = x_centre), data = women), quick = TRUE))
 attr(splintr(women$height, df = 3, centre = x_centre), "Boundary.knots")
@@ -91,7 +91,7 @@ ggplot(augment(fm2, data = women), aes(x = height)) +
 
 The four models fit identically:
 
-```{r}
+```{r compare}
 kable(t(rbind(
   fm0 = glance(fm0),
   fm1 = glance(fm1),
