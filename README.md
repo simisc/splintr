@@ -55,7 +55,7 @@ ggplot(augment(fm0, data = women), aes(x = height)) +
   geom_point(data = NULL, aes(x = 58, y = coef(fm0)[1]), col = "red")
 ```
 
-![](README-example1-1.png)
+<img src="man/figures/README-example1-1.png" width="100%" />
 
 Centring the predictor does not change the model intercept.
 
@@ -86,7 +86,7 @@ ggplot(augment(fm1, data = women), aes(x = height_centred)) +
   geom_point(data = NULL, aes(x = -7, y = coef(fm1)[1]), col = "red")
 ```
 
-![](README-example2-1.png)
+<img src="man/figures/README-example2-1.png" width="100%" />
 
 Using `splintr()` instead, the intercept representes the estimated value of `weight` when the predictor `height_centred` takes a value of zero.
 
@@ -116,7 +116,7 @@ ggplot(augment(fm2, data = women), aes(x = height_centred)) +
   geom_point(data = NULL, aes(x = 0, y = coef(fm2)[1]), col = "red")
 ```
 
-![](README-example3-1.png)
+<img src="man/figures/README-example3-1.png" width="100%" />
 
 Alternatively, an arbitrary "centre" can be specified directly in the `splintr()` call.
 
@@ -144,7 +144,7 @@ ggplot(augment(fm2, data = women), aes(x = height)) +
   geom_point(data = NULL, aes(x = x_centre, y = coef(fm3)[1]), col = "red")
 ```
 
-![](README-example4-1.png)
+<img src="man/figures/README-example4-1.png" width="100%" />
 
 The four models fit identically:
 
