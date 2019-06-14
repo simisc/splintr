@@ -2,4 +2,8 @@
 
 S3method(makepredictcall,splintr)
 S3method(predict,splintr)
+export(makepredictcall)
+export(predict)
 export(splintr)
+importFrom(stats,makepredictcall)
+importFrom(stats,predict)

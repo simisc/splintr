@@ -2,14 +2,15 @@ Package: splintr
 Type: Package
 Title: Natural Cubic SPLines with Interpretable INTercepts
 Version: 1.0.0
-Author: Simon Schoenbuchner
+Authors@R: person("Simon", "Schoenbuchner", email = "sms86@cam.ac.uk",
+  role = c("aut", "cre"))
 Description: Adjusts an ns() basis matrix so that all terms are
     zero when x takes the specified centre value. When used in a
     model formula, this ensures that the regression intercept can
     be interpreted with respect to centred x-value, rather than
     with respect to the x-value of the first boundary knot.
-License: GPL-3
+License: GPL-3 + file LICENSE
 Encoding: UTF-8
 LazyData: true
-Imports: splines
+Imports: splines, stats
 RoxygenNote: 6.1.1

@@ -42,3 +42,19 @@ predict.splintr <- function (object, newx, ...) {
   n <- do.call("splintr", a)
   return(n)
 }
+
+#' Utility Function for Safe Prediction
+#'
+#' Imported from \code{\link[stats]{makepredictcall}}
+#' @importFrom stats makepredictcall
+#' @name makepredictcall
+#' @export
+NULL
+
+#' Model predictions
+#'
+#' Imported from \code{\link[stats]{predict}}
+#' @importFrom stats predict
+#' @name predict
+#' @export
+NULL
