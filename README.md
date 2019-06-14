@@ -3,6 +3,8 @@
 splintr
 =======
 
+[![Build Status](https://travis-ci.org/simisc/splintr.svg?branch=master)](https://travis-ci.org/simisc/splintr)
+
 Natural cubic splines with interpretable intercepts: 'centres' a basis generated using `splines::ns()` on a specified x-value. When used in a model formula, this allows the model intercept to be interpreted with respect to that central x-value, rather than with respect to the x-value of the first `splines::ns()` knot.
 
 Installation
