@@ -30,75 +30,102 @@ devtools::install_github("simisc/splintr")
 
 ## Example
 
-```{r}
+```{r message=FALSE, warning=FALSE}
 library(broom)   # tidy(), augment()
 library(knitr)   # kable()
 library(splines) # ns()
 library(splintr) # splintr()
 library(ggplot2) # ggplot()
+library(dplyr)   # %>%
 theme_set(theme_minimal())
+```
+
+```{r data}
+women <- women %>%
+  mutate(height_centred = height - mean(height))
+women %>%
+  head() %>%
+  kable()
 ```
 
 Using `splines::ns()` in a model formula as below, the model intercept represents the estimated value of `weight` at the first boundary knot, i.e. when `height` takes its minimum value of 58.
 
 ```{r example1}
-kable(tidy(fm0 <- lm(weight ~ ns(height, df = 3), data = women), quick = TRUE))
-attr(ns(women$height, df = 3), "Boundary.knots")
-predict(fm0, newdata = data.frame(height = 0))
-predict(fm0, newdata = data.frame(height = 58))
-ggplot(augment(fm0, data = women), aes(x = height)) +
+fit0 <- lm(weight ~ ns(height, df = 3), data = women)
+fit0 %>%
+  tidy(quick = TRUE) %>%
+  kable()
+(knots <- ns(women$height, df = 3) %>%
+  attr("Boundary.knots"))
+predict(fit0, newdata = data.frame(height = 0))
+predict(fit0, newdata = data.frame(height = knots[1]))
+augment(fit0, data = women) %>%
+  ggplot(aes(x = height)) +
   geom_point(aes(y = weight)) +
   geom_line(aes(y = .fitted), col = "blue") +
-  geom_point(data = NULL, aes(x = 58, y = coef(fm0)[1]), col = "red")
+  geom_point(data = NULL, aes(x = knots[1], y = coef(fit0)[1]), col = "red", size = 2)
 ```
 
 Centring the predictor does not change the model intercept.
 
 ```{r example2}
-women$height_centred <- women$height - mean(women$height)
-kable(tidy(fm1 <- lm(weight ~ ns(height_centred, df = 3), data = women), quick = TRUE))
-attr(ns(women$height_centred, df = 3), "Boundary.knots")
-predict(fm1, newdata = data.frame(height_centred = 0))
-predict(fm1, newdata = data.frame(height_centred = -7))
-ggplot(augment(fm1, data = women), aes(x = height_centred)) +
+fit1 <- lm(weight ~ ns(height_centred, df = 3), data = women)
+fit1 %>%
+  tidy(quick = TRUE) %>%
+  kable()
+(knots <- ns(women$height_centred, df = 3) %>%
+  attr("Boundary.knots"))
+predict(fit1, newdata = data.frame(height_centred = 0))
+predict(fit1, newdata = data.frame(height_centred = knots[1]))
+augment(fit1, data = women) %>%
+  ggplot(aes(x = height_centred)) +
   geom_point(aes(y = weight)) +
   geom_line(aes(y = .fitted), col = "blue") +
-  geom_point(data = NULL, aes(x = -7, y = coef(fm1)[1]), col = "red")
+  geom_point(data = NULL, aes(x = knots[1], y = coef(fit1)[1]), col = "red", size = 2)
 ```
 
 Using `splintr()` instead, the intercept representes the estimated value of `weight` when the predictor `height_centred` takes a value of zero.
 
 ```{r example3}
-kable(tidy(fm2 <- lm(weight ~ splintr(height_centred, df = 3), data = women), quick = TRUE))
-attr(splintr(women$height_centred, df = 3), "Boundary.knots")
-predict(fm2, newdata = data.frame(height_centred = 0))
-predict(fm2, newdata = data.frame(height_centred = -7))
-ggplot(augment(fm2, data = women), aes(x = height_centred)) +
+fit2 <- lm(weight ~ splintr(height_centred, df = 3), data = women)
+fit2 %>%
+  tidy(quick = TRUE) %>%
+  kable()
+(knots <- splintr(women$height_centred, df = 3) %>%
+  attr("Boundary.knots"))
+predict(fit2, newdata = data.frame(height_centred = 0))
+augment(fit2, data = women) %>%
+  ggplot(aes(x = height_centred)) +
   geom_point(aes(y = weight)) +
   geom_line(aes(y = .fitted), col = "blue") +
-  geom_point(data = NULL, aes(x = 0, y = coef(fm2)[1]), col = "red")
+  geom_point(data = NULL, aes(x = 0, y = coef(fit2)[1]), col = "red", size = 2)
 ```
 
 Alternatively, an arbitrary "centre" can be specified directly in the `splintr()` call.
 
 ```{r example4}
 x_centre = 68.45
-kable(tidy(fm3 <- lm(weight ~ splintr(height, df = 3, centre = x_centre), data = women), quick = TRUE))
-attr(splintr(women$height, df = 3, centre = x_centre), "Boundary.knots")
-predict(fm3, newdata = data.frame(height = x_centre))
-ggplot(augment(fm2, data = women), aes(x = height)) +
+fit3 <- lm(weight ~ splintr(height, df = 3, centre = x_centre), data = women)
+fit3 %>%
+  tidy(quick = TRUE) %>%
+  kable()
+(knots <- splintr(women$height, df = 3, centre = x_centre) %>%
+  attr("Boundary.knots"))
+predict(fit3, newdata = data.frame(height = x_centre))
+augment(fit3, data = women) %>%
+  ggplot(aes(x = height)) +
   geom_point(aes(y = weight)) +
   geom_line(aes(y = .fitted), col = "blue") +
-  geom_point(data = NULL, aes(x = x_centre, y = coef(fm3)[1]), col = "red")
+  geom_point(data = NULL, aes(x = x_centre, y = coef(fit3)[1]), col = "red", size = 2)
 ```
 
 The four models fit identically:
 
 ```{r compare}
-kable(t(rbind(
-  fm0 = glance(fm0),
-  fm1 = glance(fm1),
-  fm2 = glance(fm2),
-  fm3 = glance(fm3)
-)))
+rbind(fit0 = glance(fit0),
+      fit1 = glance(fit1),
+      fit2 = glance(fit2),
+      fit3 = glance(fit3)) %>%
+  t() %>%
+  kable()
 ```
