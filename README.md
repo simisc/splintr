@@ -3,7 +3,7 @@
 splintr
 =======
 
-[![Build Status](https://travis-ci.org/simisc/splintr.svg?branch=master)](https://travis-ci.org/simisc/splintr)
+[![Build Status](https://travis-ci.com/simisc/splintr.svg?branch=master)](https://travis-ci.com/simisc/splintr)
 
 Natural cubic splines with interpretable intercepts: 'centres' a basis generated using `splines::ns()` on a specified x-value. When used in a model formula, this allows the model intercept to be interpreted with respect to that central x-value, rather than with respect to the x-value of the first `splines::ns()` knot.
 
@@ -56,12 +56,12 @@ fit0 %>%
   kable()
 ```
 
-| term                |   estimate|
-|:--------------------|----------:|
-| (Intercept)         |  114.55946|
-| ns(height, df = 3)1 |   23.87318|
-| ns(height, df = 3)2 |   53.04162|
-| ns(height, df = 3)3 |   41.66370|
+| term                |   estimate|  std.error|  statistic|  p.value|
+|:--------------------|----------:|----------:|----------:|--------:|
+| (Intercept)         |  114.55946|  0.2455372|  466.56662|        0|
+| ns(height, df = 3)1 |   23.87318|  0.3439476|   69.40935|        0|
+| ns(height, df = 3)2 |   53.04162|  0.6170320|   85.96251|        0|
+| ns(height, df = 3)3 |   41.66370|  0.2618841|  159.09215|        0|
 
 ``` r
 (knots <- ns(women$height, df = 3) %>%
@@ -91,12 +91,12 @@ fit1 %>%
   kable()
 ```
 
-| term                         |   estimate|
-|:-----------------------------|----------:|
-| (Intercept)                  |  114.55946|
-| ns(height\_centred, df = 3)1 |   23.87318|
-| ns(height\_centred, df = 3)2 |   53.04162|
-| ns(height\_centred, df = 3)3 |   41.66370|
+| term                         |   estimate|  std.error|  statistic|  p.value|
+|:-----------------------------|----------:|----------:|----------:|--------:|
+| (Intercept)                  |  114.55946|  0.2455372|  466.56662|        0|
+| ns(height\_centred, df = 3)1 |   23.87318|  0.3439476|   69.40935|        0|
+| ns(height\_centred, df = 3)2 |   53.04162|  0.6170320|   85.96251|        0|
+| ns(height\_centred, df = 3)3 |   41.66370|  0.2618841|  159.09215|        0|
 
 ``` r
 (knots <- ns(women$height_centred, df = 3) %>%
@@ -126,12 +126,12 @@ fit2 %>%
   kable()
 ```
 
-| term                              |   estimate|
-|:----------------------------------|----------:|
-| (Intercept)                       |  135.10672|
-| splintr(height\_centred, df = 3)1 |   23.87318|
-| splintr(height\_centred, df = 3)2 |   53.04162|
-| splintr(height\_centred, df = 3)3 |   41.66370|
+| term                              |   estimate|  std.error|   statistic|  p.value|
+|:----------------------------------|----------:|----------:|-----------:|--------:|
+| (Intercept)                       |  135.10672|  0.1288238|  1048.77107|        0|
+| splintr(height\_centred, df = 3)1 |   23.87318|  0.3439476|    69.40935|        0|
+| splintr(height\_centred, df = 3)2 |   53.04162|  0.6170320|    85.96251|        0|
+| splintr(height\_centred, df = 3)3 |   41.66370|  0.2618841|   159.09215|        0|
 
 ``` r
 (knots <- splintr(women$height_centred, df = 3) %>%
@@ -159,12 +159,12 @@ fit3 %>%
   kable()
 ```
 
-| term                                         |   estimate|
-|:---------------------------------------------|----------:|
-| (Intercept)                                  |  147.80566|
-| splintr(height, df = 3, centre = x\_centre)1 |   23.87318|
-| splintr(height, df = 3, centre = x\_centre)2 |   53.04162|
-| splintr(height, df = 3, centre = x\_centre)3 |   41.66370|
+| term                                         |   estimate|  std.error|  statistic|  p.value|
+|:---------------------------------------------|----------:|----------:|----------:|--------:|
+| (Intercept)                                  |  147.80566|  0.1513002|  976.90337|        0|
+| splintr(height, df = 3, centre = x\_centre)1 |   23.87318|  0.3439476|   69.40935|        0|
+| splintr(height, df = 3, centre = x\_centre)2 |   53.04162|  0.6170320|   85.96251|        0|
+| splintr(height, df = 3, centre = x\_centre)3 |   41.66370|  0.2618841|  159.09215|        0|
 
 ``` r
 (knots <- splintr(women$height, df = 3, centre = x_centre) %>%
@@ -194,15 +194,16 @@ rbind(fit0 = glance(fit0),
 ```
 
 |               |           fit0|           fit1|           fit2|           fit3|
-|---------------|--------------:|--------------:|--------------:|--------------:|
+|:--------------|--------------:|--------------:|--------------:|--------------:|
 | r.squared     |      0.9996629|      0.9996629|      0.9996629|      0.9996629|
 | adj.r.squared |      0.9995710|      0.9995710|      0.9995710|      0.9995710|
 | sigma         |      0.3210180|      0.3210180|      0.3210180|      0.3210180|
 | statistic     |  10874.0608930|  10874.0608930|  10874.0608930|  10874.0608930|
 | p.value       |      0.0000000|      0.0000000|      0.0000000|      0.0000000|
-| df            |      4.0000000|      4.0000000|      4.0000000|      4.0000000|
+| df            |      3.0000000|      3.0000000|      3.0000000|      3.0000000|
 | logLik        |     -1.9140458|     -1.9140458|     -1.9140458|     -1.9140458|
 | AIC           |     13.8280915|     13.8280915|     13.8280915|     13.8280915|
 | BIC           |     17.3683425|     17.3683425|     17.3683425|     17.3683425|
 | deviance      |      1.1335783|      1.1335783|      1.1335783|      1.1335783|
 | df.residual   |     11.0000000|     11.0000000|     11.0000000|     11.0000000|
+| nobs          |     15.0000000|     15.0000000|     15.0000000|     15.0000000|
