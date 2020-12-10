@@ -2,8 +2,10 @@ Package: splintr
 Type: Package
 Title: Natural Cubic SPLines with Interpretable INTercepts
 Version: 1.0.0
-Authors@R: person("Simon", "Schoenbuchner", email = "sms86@cam.ac.uk",
-  role = c("aut", "cre"))
+Authors@R: person("Simon", "Schoenbuchner",
+  email = "sms86@cam.ac.uk",
+  role = c("aut", "cre"),
+  comment = c(ORCID = "0000-0003-4892-2170"))
 Description: Adjusts an ns() basis matrix so that all terms are
     zero when x takes the specified centre value. When used in a
     model formula, this ensures that the regression intercept can
