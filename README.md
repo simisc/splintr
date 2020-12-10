@@ -7,6 +7,7 @@
 Status](https://travis-ci.com/simisc/splintr.svg?branch=master)](https://travis-ci.com/simisc/splintr)
 [![DOI](https://zenodo.org/badge/141533742.svg)](https://zenodo.org/badge/latestdoi/141533742)
 [![Licence](https://img.shields.io/github/license/simisc/splintr)](https://github.com/simisc/splintr/blob/master/LICENSE)
+[![Lifecycle](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://www.tidyverse.org/lifecycle/#stable)
 
 Natural cubic splines with interpretable intercepts: ‘centres’ a basis
 generated using `splines::ns()` on a specified x-value. When used in a
