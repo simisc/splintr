@@ -1,7 +1,7 @@
 Package: splintr
 Type: Package
 Title: Natural Cubic SPLines with Interpretable INTercepts
-Version: 1.0.0
+Version: 1.0.1
 Authors@R: person("Simon", "Schoenbuchner",
   email = "sms86@cam.ac.uk",
   role = c("aut", "cre"),
@@ -16,3 +16,5 @@ Encoding: UTF-8
 LazyData: true
 Imports: splines, stats
 RoxygenNote: 6.1.1
+Suggests: 
+    testthat
