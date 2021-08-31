@@ -18,7 +18,7 @@ splintr <- function(..., centre = 0) {
 }
 
 #' @export
-makepredictcall.splintr <- function (var, call) {
+makepredictcall.splintr <- function(var, call) {
   # For prediction from models that use splintr in the formula
   as.character(call)[1L] != "splintr" && return(call)
   at <- attributes(var)[c("knots",
@@ -31,7 +31,7 @@ makepredictcall.splintr <- function (var, call) {
 }
 
 #' @export
-predict.splintr <- function (object, newx, ...) {
+predict.splintr <- function(object, newx, ...) {
   # For prediction from the splintr object itself
   missing(newx) && return(object)
   a <- c(list(x = newx),
