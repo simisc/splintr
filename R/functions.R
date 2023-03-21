@@ -5,9 +5,10 @@
 #' @export
 #' @param ... Parameters passed to \code{\link[splines]{ns}}.
 #' @param centre The \code{x}-value at which all spline terms should be zero.
-#' @return A matrix of dimension \code{length(x)} by \code{df}, like \code{\link[splines]{ns}}.
-#'   Attributes are that correspond to the arguments to \code{\link[splines]{ns}} with an additional
-#'   \code{centre} attribute for use by \code{predict.splintr()}.
+#' @return A matrix of dimension \code{length(x)} by \code{df},
+#'   like \code{\link[splines]{ns}}. Attributes correspond to those of
+#'   \code{\link[splines]{ns}} with an additional \code{centre} attribute for
+#' use by \code{predict.splintr()}.
 splintr <- function(..., centre = 0) {
   n <- splines::ns(...)
   adj <- predict(n, newx = centre)
@@ -21,12 +22,9 @@ splintr <- function(..., centre = 0) {
 makepredictcall.splintr <- function(var, call) {
   # For prediction from models that use splintr in the formula
   as.character(call)[1L] != "splintr" && return(call)
-  at <- attributes(var)[c("knots",
-                          "Boundary.knots",
-                          "intercept",
-                          "centre")]
   x <- call[1L:2L]
-  x[names(at)] <- at
+  atnames <- c("knots", "Boundary.knots", "intercept", "centre")
+  x[atnames] <- attributes(var)[atnames]
   return(x)
 }
 
@@ -34,11 +32,8 @@ makepredictcall.splintr <- function(var, call) {
 predict.splintr <- function(object, newx, ...) {
   # For prediction from the splintr object itself
   missing(newx) && return(object)
-  a <- c(list(x = newx),
-         attributes(object)[c("knots",
-                              "Boundary.knots",
-                              "intercept",
-                              "centre")])
+  atnames <- c("knots", "Boundary.knots", "intercept", "centre")
+  a <- c(list(x = newx), attributes(object)[atnames])
   n <- do.call("splintr", a)
   return(n)
 }

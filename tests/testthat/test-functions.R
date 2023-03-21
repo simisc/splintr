@@ -1,5 +1,3 @@
-context("Compare splintr with ns")
-
 library(splines)
 library(splintr)
 
@@ -30,4 +28,3 @@ test_that("models generate the same predictions", {
   expect_equal(predict(m0), predict(m1))
   expect_equal(predict(m0), predict(m2))
 })
-

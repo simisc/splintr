@@ -12,9 +12,10 @@ splintr(..., centre = 0)
 \item{centre}{The \code{x}-value at which all spline terms should be zero.}
 }
 \value{
-A matrix of dimension \code{length(x)} by \code{df}, like \code{\link[splines]{ns}}.
-  Attributes are that correspond to the arguments to \code{\link[splines]{ns}} with an additional
-  \code{centre} attribute for use by \code{predict.splintr()}.
+A matrix of dimension \code{length(x)} by \code{df},
+  like \code{\link[splines]{ns}}. Attributes correspond to those of
+  \code{\link[splines]{ns}} with an additional \code{centre} attribute for
+use by \code{predict.splintr()}.
 }
 \description{
 Generate the basis matrix for a natural cubic splines with interpretable
