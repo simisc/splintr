@@ -3,12 +3,14 @@
 
 # splintr
 
-[![R build
-status](https://github.com/simisc/splintr/workflows/R-CMD-check/badge.svg)](https://github.com/simisc/splintr/actions)
+<!-- badges: start -->
+
+[![check-standard](https://github.com/simisc/splintr/actions/workflows/check-standard.yaml/badge.svg)](https://github.com/simisc/splintr/actions/workflows/check-standard.yaml)
 [![DOI](https://zenodo.org/badge/141533742.svg)](https://zenodo.org/badge/latestdoi/141533742)
 [![Licence](https://img.shields.io/github/license/simisc/splintr)](https://github.com/simisc/splintr/blob/master/LICENSE)
 [![Lifecycle](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://www.tidyverse.org/lifecycle/#stable)
 [![codecov](https://codecov.io/gh/simisc/splintr/branch/master/graph/badge.svg?token=U41V9KQ40I)](https://codecov.io/gh/simisc/splintr)
+<!-- badges: end -->
 
 Natural cubic splines with interpretable intercepts: ‘centres’ a basis
 generated using `splines::ns()` on a specified x-value. When used in a
@@ -46,21 +48,23 @@ women %>%
 ```
 
 | height | weight | height\_centred |
-|-------:|-------:|----------------:|
-|     58 |    115 |              -7 |
-|     59 |    117 |              -6 |
-|     60 |    120 |              -5 |
-|     61 |    123 |              -4 |
-|     62 |    126 |              -3 |
-|     63 |    129 |              -2 |
+| -----: | -----: | --------------: |
+|     58 |    115 |             \-7 |
+|     59 |    117 |             \-6 |
+|     60 |    120 |             \-5 |
+|     61 |    123 |             \-4 |
+|     62 |    126 |             \-3 |
+|     63 |    129 |             \-2 |
 
 Different parametrisations of the same model:
 
--   `fit0`: using `ns` with raw heights
--   `fit1`: using `ns` with centred heights
--   `fit2`: using `splintr` with centred heights
--   `fit3`: using `splintr` with raw heights and explicit (arbitrary)
+  - `fit0`: using `ns` with raw heights
+  - `fit1`: using `ns` with centred heights
+  - `fit2`: using `splintr` with centred heights
+  - `fit3`: using `splintr` with raw heights and explicit (arbitrary)
     centre
+
+<!-- end list -->
 
 ``` r
 model_formulae <- list(
@@ -83,12 +87,12 @@ model_fits %>%
   kable()
 ```
 
-| model |    sigma |    logLik | deviance |
-|:------|---------:|----------:|---------:|
-| fit0  | 0.321018 | -1.914046 | 1.133578 |
-| fit1  | 0.321018 | -1.914046 | 1.133578 |
-| fit2  | 0.321018 | -1.914046 | 1.133578 |
-| fit3  | 0.321018 | -1.914046 | 1.133578 |
+| model |    sigma |     logLik | deviance |
+| :---- | -------: | ---------: | -------: |
+| fit0  | 0.321018 | \-1.914046 | 1.133578 |
+| fit1  | 0.321018 | \-1.914046 | 1.133578 |
+| fit2  | 0.321018 | \-1.914046 | 1.133578 |
+| fit3  | 0.321018 | \-1.914046 | 1.133578 |
 
 But they have different intercepts:
 
@@ -101,7 +105,7 @@ model_fits %>%
 ```
 
 | model | estimate | std.error | statistic |
-|:------|---------:|----------:|----------:|
+| :---- | -------: | --------: | --------: |
 | fit0  | 114.5595 | 0.2455372 |  466.5666 |
 | fit1  | 114.5595 | 0.2455372 |  466.5666 |
 | fit2  | 135.1067 | 0.1288238 | 1048.7711 |
@@ -132,7 +136,7 @@ augment(model_fits[[1]], data = women) %>%
   ggplot(aes(x = height)) +
   geom_point(aes(y = weight)) +
   geom_line(aes(y = .fitted), col = "blue") +
-  geom_point(data = int_pts, aes(x = x, y = y), col = "red") + 
+  geom_point(data = int_pts, aes(x = x, y = y), col = "red") +
   geom_label_repel(data = int_pts, aes(x = x, y = y, label = model),
                    col = "red", nudge_y = 7) +
   theme_few()

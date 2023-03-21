@@ -15,11 +15,13 @@ knitr::opts_chunk$set(
 
 # splintr
 
-[![R build status](https://github.com/simisc/splintr/workflows/R-CMD-check/badge.svg)](https://github.com/simisc/splintr/actions)
+<!-- badges: start -->
+[![check-standard](https://github.com/simisc/splintr/actions/workflows/check-standard.yaml/badge.svg)](https://github.com/simisc/splintr/actions/workflows/check-standard.yaml)
 [![DOI](https://zenodo.org/badge/141533742.svg)](https://zenodo.org/badge/latestdoi/141533742)
 [![Licence](https://img.shields.io/github/license/simisc/splintr)](https://github.com/simisc/splintr/blob/master/LICENSE)
 [![Lifecycle](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://www.tidyverse.org/lifecycle/#stable)
 [![codecov](https://codecov.io/gh/simisc/splintr/branch/master/graph/badge.svg?token=U41V9KQ40I)](https://codecov.io/gh/simisc/splintr)
+<!-- badges: end -->
 
 Natural cubic splines with interpretable intercepts: 'centres' a basis generated using `splines::ns()` on a specified x-value. When used in a model formula, this allows the model intercept to be interpreted with respect to that central x-value, rather than with respect to the x-value of the first `splines::ns()` knot.
 
@@ -110,7 +112,7 @@ augment(model_fits[[1]], data = women) %>%
   ggplot(aes(x = height)) +
   geom_point(aes(y = weight)) +
   geom_line(aes(y = .fitted), col = "blue") +
-  geom_point(data = int_pts, aes(x = x, y = y), col = "red") + 
+  geom_point(data = int_pts, aes(x = x, y = y), col = "red") +
   geom_label_repel(data = int_pts, aes(x = x, y = y, label = model),
                    col = "red", nudge_y = 7) +
   theme_few()
